@@ -1,40 +1,48 @@
-
 # AI-Powered Escape Room
 
-An interactive AI-powered escape room developed using Python,
-Gemini API and Gradio.
+An interactive escape room application developed using Python, Google Gemini API and Gradio.
 
-## Project Objective
+## 1. Project Overview
 
-The player wakes up inside a mysterious library and must
-investigate objects, solve puzzles and unlock the exit.
+The player wakes up inside a locked library. They must investigate objects, discover clues, solve puzzles and unlock the exit door.
 
-## Technologies
+The project demonstrates two approaches to building an AI-powered game: an LLM-driven approach in Version 1 and a structured, rule-based approach in Version 2.
+
+## 2. Technologies
 
 - Python
 - Google Gemini API
 - Gradio
-- GitHub
 - Pytest
+- Git and GitHub
 
-## Project Versions
+## 3. Version 1 - AI Game Master
 
-### Version 1 - Interactive AI Escape Room
+Version 1 uses Gemini as the Game Master.
 
-- Gemini Game Master
-- Natural language interaction
+Features:
+- Natural-language interaction
 - Conversation history
-- Interactive library environment
+- AI-generated game responses
+- Interactive library objects
 
-### Version 2 - Reliable AI Escape Room
+Limitation: The language model may misunderstand actions or produce inconsistent game progress.
 
+## 4. Version 2 - Structured Game Logic
+
+Version 2 introduces deterministic Python-based game management.
+
+Features:
 - Structured game state
-- Inventory management
+- Inventory tracking
 - Action validation
-- Puzzle validation
+- Puzzle and code validation
+- Invalid-action handling
 - Consistent game progression
 
-## Interactive Objects
+Python determines whether an action is valid before the game state is updated.
+
+## 5. Interactive Objects
 
 1. Desk
 2. Bookshelf
@@ -42,44 +50,69 @@ investigate objects, solve puzzles and unlock the exit.
 4. Locked drawer
 5. Exit door
 
-## Puzzle Solutions
+## 6. Puzzle Sequence
 
-The player discovers the drawer combination and final
-door combination by investigating the room.
+The player investigates the library, collects a brass key, discovers the drawer combination, opens the drawer and finds the final door code.
 
-The drawer combination is 2468.
-The final door combination is 7314.
+- Drawer code: 2468
+- Exit door code: 7314
 
-## Installation
+## 7. Installation
 
-Install the dependencies:
+Clone the repository:
+
+    git clone https://github.com/rohankush444/AI-Powered-Escape-Room.git
+
+Enter the project directory:
+
+    cd AI-Powered-Escape-Room
+
+Install dependencies:
 
     pip install -r requirements.txt
 
-Set the GEMINI_API_KEY environment variable.
+## 8. API Configuration
 
-Run the application:
+Set the environment variable GEMINI_API_KEY to your Gemini API key.
+
+For Google Colab, add the key through Colab Secrets.
+
+Never upload your real API key to GitHub.
+
+## 9. Run the Application
 
     python app.py
 
-## Testing
+Open the Gradio link displayed when the application starts.
 
-Run:
+## 10. Run Tests
 
     pytest -v tests/
 
-## Architecture
+See test_cases.md for additional test scenarios.
 
-See:
+## 11. Architecture
 
 - architecture_v1.mmd
 - architecture_v2.mmd
 
-## Report
+## 12. Project Report
 
-See report.md.
+See report.md for implementation details, challenges, testing and improvements.
 
-## Author
+## 13. Screenshots and Demonstration
+
+Screenshots of the actual running application should be added to the screenshots/ directory.
+
+Add a link to the demonstration video after recording it.
+
+## 14. Limitations and Future Improvements
+
+- The application currently uses one library room.
+- AI responses depend on Gemini API availability and model access.
+- Additional rooms, puzzles, scoring and richer visual interactions could be added in future versions.
+
+## 15. Author
 
 Rohan Ramashray Kushwaha
 
