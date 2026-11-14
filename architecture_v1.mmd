@@ -1,0 +1,9 @@
+
+flowchart TD
+    A[Player] --> B[Gradio Interface]
+    B --> C[Python Application]
+    C --> D[Conversation History]
+    D --> E[Gemini LLM]
+    E --> F[AI Game Master Response]
+    F --> B
+    B --> A

@@ -1,0 +1,13 @@
+
+flowchart TD
+    A[Player] --> B[Gradio Interface]
+    B --> C[Python Game Engine]
+    C --> D[Structured Game State]
+    C --> E[Action Validation]
+    E --> F{Action Valid?}
+    F -->|No| G[Reject Action]
+    F -->|Yes| H[Update Game State]
+    H --> I[Gemini Narration]
+    G --> J[Display Response]
+    I --> J
+    J --> B
