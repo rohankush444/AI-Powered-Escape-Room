@@ -9,23 +9,15 @@ from game_v2 import (
     narrate_with_gemini
 )
 
-
-# ==========================================
-# APPLICATION SETTINGS
-# ==========================================
-
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 
-
 INTRODUCTION = """
-# AI-Powered Escape Room
+# 🔐 AI-Powered Escape Room
 
 Welcome to the mysterious library!
 
 You have awakened inside a locked room.
-
-Your objective is to investigate the environment,
-solve puzzles and unlock the exit door.
+Investigate objects, solve puzzles and escape.
 
 ### Available objects
 - Desk
@@ -35,65 +27,43 @@ solve puzzles and unlock the exit door.
 - Exit door
 
 ### Instructions
-Type natural-language messages into the chat.
-
-Examples:
+Try these commands:
 - Examine the bookshelf.
 - Examine the painting.
 - Take the key.
 - Check inventory.
 - Use the key on the drawer.
-- Enter 2468 for the drawer.
+- Enter 2468 for drawer.
 
-Good luck escaping!
+Good luck!
 """
 
-
-# ==========================================
-# CHAT HANDLER
-# ==========================================
 
 def handle_message(message, history, state, version):
 
     if not message or not message.strip():
-
         return history, state, "Please enter a message.", ""
 
     history = history or []
-
     state = state or create_initial_state()
 
     if version == "Version 1":
 
-        # Version 1 uses the AI Game Master
         reply = chat_v1(
             message,
             history,
             GEMINI_API_KEY
         )
 
-        # V1 intentionally has weaker validation
-        if (
-            "7314" in message
-            and any(word in message.lower()
-                    for word in ["door", "exit", "escape"])
-        ):
-            state["escaped"] = True
-
-        status = (
-            "Version 1 | AI-driven game | "
-            + ("Escaped" if state["escaped"] else "Playing")
-        )
+        status = "Version 1 | AI-driven game"
 
     else:
 
-        # Version 2 uses Python validation first
         event, state = process_action(
             message,
             state
         )
 
-        # Gemini only narrates the validated event
         reply = narrate_with_gemini(
             event,
             message,
@@ -102,7 +72,7 @@ def handle_message(message, history, state, version):
 
         status = (
             "Version 2 | Validated game | "
-            + ("Escaped" if state["escaped"] else "Playing")
+            + ("Escaped!" if state["escaped"] else "Playing")
         )
 
     history = history + [
@@ -112,10 +82,6 @@ def handle_message(message, history, state, version):
 
     return history, state, status, ""
 
-
-# ==========================================
-# RESET GAME
-# ==========================================
 
 def reset_game():
 
@@ -127,14 +93,8 @@ def reset_game():
     )
 
 
-# ==========================================
-# GRADIO INTERFACE
-# ==========================================
-
-with gr.Blocks(
-    theme=gr.themes.Soft(),
-    title="AI-Powered Escape Room"
-) as demo:
+# Gradio 6 compatible interface
+with gr.Blocks(title="AI-Powered Escape Room") as demo:
 
     gr.Markdown(INTRODUCTION)
 
@@ -148,9 +108,9 @@ with gr.Blocks(
         "Version 2 | Validated game | Playing"
     )
 
+    # Removed type="messages" for compatibility
     chatbot = gr.Chatbot(
         label="Game Master",
-        type="messages",
         height=430
     )
 
@@ -175,40 +135,34 @@ with gr.Blocks(
             "Restart Game"
         )
 
+    inputs = [
+        message_box,
+        chatbot,
+        game_state,
+        version
+    ]
+
+    outputs = [
+        chatbot,
+        game_state,
+        status,
+        message_box
+    ]
+
     send_button.click(
-        handle_message,
-        inputs=[
-            message_box,
-            chatbot,
-            game_state,
-            version
-        ],
-        outputs=[
-            chatbot,
-            game_state,
-            status,
-            message_box
-        ]
+        fn=handle_message,
+        inputs=inputs,
+        outputs=outputs
     )
 
     message_box.submit(
-        handle_message,
-        inputs=[
-            message_box,
-            chatbot,
-            game_state,
-            version
-        ],
-        outputs=[
-            chatbot,
-            game_state,
-            status,
-            message_box
-        ]
+        fn=handle_message,
+        inputs=inputs,
+        outputs=outputs
     )
 
     restart_button.click(
-        reset_game,
+        fn=reset_game,
         outputs=[
             chatbot,
             game_state,
@@ -217,14 +171,11 @@ with gr.Blocks(
         ]
     )
 
-
-# ==========================================
-# LAUNCH APPLICATION
-# ==========================================
 
 if __name__ == "__main__":
 
     demo.launch(
         share=True,
-        debug=True
+        debug=True,
+        theme=gr.themes.Soft()
     )
